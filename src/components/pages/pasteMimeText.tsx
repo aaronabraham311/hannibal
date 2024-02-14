@@ -1,5 +1,7 @@
 import { ChangeEvent, MouseEvent, useState } from "react"
 
+import parseMimeText from "@/app/openai";
+
 export default function PasteMimeText() {
   const [mimeText, setMimeText] = useState("");
   const []
@@ -8,10 +10,11 @@ export default function PasteMimeText() {
     setMimeText(event.target.value);
   }
 
-  const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
     // Parse mimeText using OpenAI call
+    const parsedReceipt = await parseMimeText(mimeText);
   }
 
   return (
