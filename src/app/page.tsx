@@ -18,7 +18,7 @@ export default function Home() {
       />
       <button
         className="px-6 py-2 border rounded-md bg-blue-500 text-white hover:bg-blue-600 m-2.5"
-        onClick={() => handleSubmit}
+        onClick={handleSubmit}
       >
         Submit
       </button>
