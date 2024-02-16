@@ -1,10 +1,14 @@
 import { ChangeEvent, MouseEvent, useState } from "react"
 
-import parseMimeText from "@/app/openai";
+import parseMimeText from "@/app/utils/openai";
+import { Receipt } from "@/app/types";
 
-export default function PasteMimeText() {
+interface PasteMimeTextProps {
+  setReceipt: (receipt: Receipt) => void;
+}
+
+export default function PasteMimeText({ setReceipt } : PasteMimeTextProps) {
   const [mimeText, setMimeText] = useState("");
-  const []
 
   const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setMimeText(event.target.value);
@@ -14,7 +18,11 @@ export default function PasteMimeText() {
     event.preventDefault();
 
     // Parse mimeText using OpenAI call
+    // TODO: convert to an API call
     const parsedReceipt = await parseMimeText(mimeText);
+
+    // Set state
+    setReceipt(parsedReceipt);
   }
 
   return (
