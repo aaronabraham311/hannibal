@@ -4,7 +4,7 @@ import { Receipt } from "../types";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const PROMPT = `
-The following is an Instacart food order receipt. 
+The following is an Instacart food order receipt in MIME text. 
 
 Extract out items (name, quantity, price per unit, total price), item subtotal, tip, service fee, tax and final total price.
 
@@ -58,7 +58,7 @@ The extracted items should be in a JSON format. The JSON schema has been provide
 }
 """
 
-Here is the Instacart receipt
+Here is the Instacart receipt in MIME text. Convert it into the JSON schema above
 `
 
 const parseMimeText = async (mimeText: string) : Promise<Receipt> => {

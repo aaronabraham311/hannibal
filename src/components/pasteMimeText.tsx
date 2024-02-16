@@ -1,6 +1,5 @@
 import { ChangeEvent, MouseEvent, useState } from "react"
 
-import parseMimeText from "@/app/utils/openai";
 import { Receipt } from "@/app/types";
 
 interface PasteMimeTextProps {
@@ -9,6 +8,7 @@ interface PasteMimeTextProps {
 
 export default function PasteMimeText({ setReceipt } : PasteMimeTextProps) {
   const [mimeText, setMimeText] = useState("");
+  const [isParsing, setIsParsing] = useState(false);
 
   const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setMimeText(event.target.value);
@@ -17,12 +17,18 @@ export default function PasteMimeText({ setReceipt } : PasteMimeTextProps) {
   const handleSubmit = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    // Parse mimeText using OpenAI call
-    // TODO: convert to an API call
-    const parsedReceipt = await parseMimeText(mimeText);
+    setIsParsing(true);
 
+    // Parse mimeText using OpenAI call
+    const response = await fetch("/api/parse", {
+      method: "POST",
+      body: JSON.stringify({"text": mimeText})
+    })
+    const parsedReceipt = await response.json() as Receipt;
+    console.log(parsedReceipt)
     // Set state
     setReceipt(parsedReceipt);
+    setIsParsing(false);
   }
 
   return (
@@ -38,12 +44,17 @@ export default function PasteMimeText({ setReceipt } : PasteMimeTextProps) {
           value={mimeText}
           onChange={handleTextChange}
       />
-      <button
-          className="px-6 py-2 border rounded-md bg-blue-500 text-white hover:bg-blue-600 m-2.5"
-          onClick={handleSubmit}
-      >
-          Submit
-      </button>
+      {
+        isParsing 
+          ? <p>Parsing...</p> 
+          : <button
+              className="px-6 py-2 border rounded-md bg-blue-500 text-white hover:bg-blue-600 m-2.5"
+              onClick={handleSubmit}
+              disabled={isParsing}
+            > 
+                  Submit
+            </button>
+      }
       </div>
     </main>
   )
