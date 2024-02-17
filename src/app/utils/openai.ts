@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { Receipt } from "../types";
+import { Receipt } from "./types";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 

@@ -1,6 +1,6 @@
 import { ChangeEvent, MouseEvent, useState } from "react"
 
-import { Receipt } from "@/app/types";
+import { Receipt } from "@/app/utils/types";
 
 interface PasteMimeTextProps {
   setReceipt: (receipt: Receipt) => void;
