@@ -20,15 +20,20 @@ export default function PasteMimeText({ setReceipt } : PasteMimeTextProps) {
     setIsParsing(true);
 
     // Parse mimeText using OpenAI call
-    const response = await fetch("/api/parse", {
-      method: "POST",
-      body: JSON.stringify({"text": mimeText})
-    })
-    const parsedReceipt = await response.json() as Receipt;
-    console.log(parsedReceipt)
-    // Set state
-    setReceipt(parsedReceipt);
-    setIsParsing(false);
+    try {
+      const response = await fetch("/api/parse", {
+        method: "POST",
+        body: JSON.stringify({ "text": mimeText })
+      });
+      const jsonResponse = await response.json();
+  
+      // Set state after async operation in a batched update
+      setReceipt(jsonResponse["parsedReceipt"]);
+      setIsParsing(false);
+    } catch (error) {
+      console.error(error);
+      setIsParsing(false);
+    }
   }
 
   return (

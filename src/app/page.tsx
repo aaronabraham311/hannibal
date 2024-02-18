@@ -1,7 +1,7 @@
 'use client';
 
 import PasteMimeText from "@/components/pasteMimeText";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Receipt } from "./utils/types";
 import SplitReceipt from "@/components/splitReceipt";
 
