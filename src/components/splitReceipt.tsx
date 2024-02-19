@@ -1,11 +1,12 @@
-import { GetGroupResponse, Item, Receipt, ProposedSplits, SplitwiseMember } from "@/app/utils/types";
+import { GetGroupResponse, Item, Receipt, ProposedSplits, SplitwiseMember, FinalReceiptSplit } from "@/app/utils/types";
 import { useEffect, useState } from "react";
 
 interface SplitReceiptProps {
   receipt: Receipt;
+  setFinalReceiptSplit: (finalReceiptSplit: FinalReceiptSplit) => void;
 }
 
-export default function SplitReceipt({ receipt }: SplitReceiptProps) {
+export default function SplitReceipt({ receipt, setFinalReceiptSplit }: SplitReceiptProps) {
   const [groupId, setGroupId] = useState(0);
   const [groupMembers, setGroupMembers] = useState<Array<SplitwiseMember>>([]);
   const [formState, setFormState] = useState<ProposedSplits>();
@@ -69,7 +70,7 @@ export default function SplitReceipt({ receipt }: SplitReceiptProps) {
       })
     });
     const response = await rawResponse.json();
-    console.log(response)
+    setFinalReceiptSplit(response["splitReceiptValue"]);
   }
 
   return (
@@ -109,7 +110,12 @@ export default function SplitReceipt({ receipt }: SplitReceiptProps) {
           ))}
         </tbody>
       </table>
-      <button onClick={handleSubmit}>Submit</button>
+      <button 
+        onClick={handleSubmit}
+        className="px-6 py-2 border rounded-md bg-blue-500 text-white hover:bg-blue-600 m-2.5"
+        >
+          Submit
+      </button>
     </div>
   )
 }

@@ -89,6 +89,7 @@ export interface FinalReceiptMemberSplit {
   tip: number;
   serviceFee: number;
   tax: number;
+  total: number;
 }
 
 export interface FinalReceiptSplit {

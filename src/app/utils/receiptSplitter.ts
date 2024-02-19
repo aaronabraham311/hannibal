@@ -54,7 +54,8 @@ const initializeFinalSplit = (members: SplitwiseMember[]) : FinalReceiptSplit =>
       subtotal: 0,
       tip: 0,
       serviceFee: 0,
-      tax: 0
+      tax: 0,
+      total: 0
     })
   });
   return finalReceiptSplitObject;
@@ -95,10 +96,15 @@ export const splitReceipt = (receipt: Receipt, proposedSplits : ProposedSplits, 
   splitAndUpdateCost('serviceFee', receipt.serviceFee, involvedMembers, finalReceiptSplitObject);
   splitAndUpdateCost('tax', receipt.tax, involvedMembers, finalReceiptSplitObject);
 
+  // Update total
+  finalReceiptSplitObject.members.forEach(member => {
+    const total = member.subtotal + member.serviceFee + member.tax + member.tip;
+    member.total = parseFloat(total.toFixed(2));
+  });
+
   // Add everything and update total
   finalReceiptSplitObject.total = finalReceiptSplitObject.members.reduce((acc, member) => {
-    const memberTotal = member.subtotal + member.tax + member.serviceFee + member.tip;
-    return acc + memberTotal
+    return acc + member.total;
   }, 0)
 
   return finalReceiptSplitObject
