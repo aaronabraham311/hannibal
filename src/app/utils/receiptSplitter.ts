@@ -86,9 +86,9 @@ export const splitReceipt = (receipt: Receipt, proposedSplits : ProposedSplits, 
   });
 
   // Get all members that are involved in the split
-  const involvedMembersFlattened = Object.values(proposedSplits).flat();
-  const involvedMembersSet = new Set(involvedMembersFlattened);
-  const involvedMembers = Array.from(involvedMembersSet);
+  const involvedMembersIdsFlattened = Object.values(proposedSplits).flat().map(member => member.id);
+  const involvedMembersIdSet = new Set(involvedMembersIdsFlattened);
+  const involvedMembers = members.filter(member => involvedMembersIdSet.has(member.id));
 
   // Split tip, service fee and tax
   splitAndUpdateCost('tip', receipt.tip, involvedMembers, finalReceiptSplitObject);

@@ -59,6 +59,19 @@ export default function SplitReceipt({ receipt }: SplitReceiptProps) {
     console.log(formState);
   };
 
+  const handleSubmit = async () => {
+    const rawResponse = await fetch("/api/calculate_split", {
+      method: "POST",
+      body: JSON.stringify({
+        "members": groupMembers,
+        "receipt": receipt,
+        "memberSplits": formState
+      })
+    });
+    const response = await rawResponse.json();
+    console.log(response)
+  }
+
   return (
     <div className="p-4">
       <table className="min-w-full table-fixed">
@@ -96,6 +109,7 @@ export default function SplitReceipt({ receipt }: SplitReceiptProps) {
           ))}
         </tbody>
       </table>
+      <button onClick={handleSubmit}>Submit</button>
     </div>
   )
 }
