@@ -75,3 +75,23 @@ export interface GetGroupResponse {
   groupId: number;
   groupMembers: [SplitwiseMember];
 }
+
+export interface ProposedSplits {
+  [item: string]: SplitwiseMember[];
+}
+
+export interface FinalReceiptMemberSplit {
+  memberInfo: SplitwiseMember;
+  splits: {
+    [itemName: string] : number;
+  };
+  subtotal: number;
+  tip: number;
+  serviceFee: number;
+  tax: number;
+}
+
+export interface FinalReceiptSplit {
+  members: FinalReceiptMemberSplit[];
+  total: number;
+}

@@ -1,18 +1,14 @@
-import { GetGroupResponse, Item, Receipt, SplitwiseMember } from "@/app/utils/types";
+import { GetGroupResponse, Item, Receipt, ProposedSplits, SplitwiseMember } from "@/app/utils/types";
 import { useEffect, useState } from "react";
 
 interface SplitReceiptProps {
   receipt: Receipt;
 }
 
-interface SplitReceiptFormState {
-  [item: string]: SplitwiseMember[];
-}
-
 export default function SplitReceipt({ receipt }: SplitReceiptProps) {
   const [groupId, setGroupId] = useState(0);
   const [groupMembers, setGroupMembers] = useState<Array<SplitwiseMember>>([]);
-  const [formState, setFormState] = useState<SplitReceiptFormState>();
+  const [formState, setFormState] = useState<ProposedSplits>();
 
   const fetchData = async () => {
     // Call Splitwise API
@@ -69,7 +65,8 @@ export default function SplitReceipt({ receipt }: SplitReceiptProps) {
         <thead>
           <tr className="border-b">
             <th className="text-left p-2">Item</th>
-            <th className="text-left p-2">Price</th>
+            <th className="text-left p-2">Quantity</th>
+            <th className="text-left p-2">Total Price</th>
             <th className="text-left p-2">Members</th>
           </tr>
         </thead>
@@ -77,6 +74,7 @@ export default function SplitReceipt({ receipt }: SplitReceiptProps) {
           {receipt.items.map((item, index) => (
             <tr key={index} className="border-b">
               <td className="p-2">{item.name}</td>
+              <td className="p-2">{item.quantity}</td>
               <td className="p-2">${item.totalItemPrice.toFixed(2)}</td>
               <td className="p-2">
                 {groupMembers.map((member) => {
