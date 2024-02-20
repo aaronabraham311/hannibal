@@ -3,9 +3,23 @@ import { FinalReceiptMemberSplit, FinalReceiptSplit, Receipt } from "@/app/utils
 interface FinalReceiptSplitConfirmationProps {
   finalReceiptSplit: FinalReceiptSplit;
   receipt: Receipt;
+  groupId: number;
 }
 
-export default function FinalReceiptSplitConfirmation({ finalReceiptSplit, receipt } : FinalReceiptSplitConfirmationProps) {
+export default function FinalReceiptSplitConfirmation({ finalReceiptSplit, receipt, groupId } : FinalReceiptSplitConfirmationProps) {
+  const handleSubmit = async () => {
+    const rawJson = await fetch("/api/splitwise/expense", {
+      method: "POST",
+      body: JSON.stringify({
+        receipt: receipt,
+        finalSplits: finalReceiptSplit,
+        groupId: groupId
+      })
+    });
+    const json = await rawJson.json();
+    console.log(json)
+  }
+  
   return (
     <div className="p-4">
       <table className="min-w-full table-fixed">
@@ -66,7 +80,10 @@ export default function FinalReceiptSplitConfirmation({ finalReceiptSplit, recei
         </tbody>
       </table>
       <div className="flex justify-center mt-4">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <button 
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={handleSubmit}
+        >
           Confirm
         </button>
       </div>

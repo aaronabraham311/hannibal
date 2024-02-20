@@ -18,7 +18,11 @@ export default function Home() {
       <SplitReceipt receipt={receipt} setFinalReceiptSplit={setFinalReceiptSplit} setGroupId={setGroupId}/>
      )}
      {finalReceiptSplit && receipt && (
-      <FinalReceiptSplitConfirmation receipt={receipt} finalReceiptSplit={finalReceiptSplit}/>
+      <FinalReceiptSplitConfirmation
+        receipt={receipt}
+        finalReceiptSplit={finalReceiptSplit}
+        groupId={groupId}
+      />
      )}
     </main>
   );

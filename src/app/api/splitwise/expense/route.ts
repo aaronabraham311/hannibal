@@ -1,13 +1,16 @@
 import { FinalReceiptSplit, Receipt } from "@/app/utils/types";
+import axios from "axios";
 
 const SPLITWISE_API_ROUTE_CREATE_EXPENSE = "https://secure.splitwise.com/api/v3.0/create_expense"
 
 interface SplitwiseCreateExpenseBody {
-  cost: number;
+  cost: string;
   description: string;
+  details: string;
   date: string;
   repeat_interval: string;
   currency_code: string;
+  category_id: number;
   group_id: number;
   [key: string]: number | string;
 }
@@ -21,37 +24,38 @@ export async function POST(request: Request) {
 
     // Package information into a Splitwise request
     let splitwiseBody: SplitwiseCreateExpenseBody = {
-      "cost": receipt.totalPrice,
+      "cost": receipt.totalPrice.toString(),
+      "details": "from hannibal",
       "description": "Instacart",
       "date": new Date(Date.now()).toISOString(),
       "repeat_interval": "never",
       "currency_code": "CAD",
+      "category_id": 15,
       "group_id": groupId,
     };
 
     finalSplits.members.forEach((member, index) => {
-      splitwiseBody[`users_${index}_user_id`] = member.memberInfo.id;
-      splitwiseBody[`users_${index}_owed_share`] = member.total;
+      if (member.total > 0) {
+        splitwiseBody[`users__${index}__user_id`] = member.memberInfo.id;
+        splitwiseBody[`users__${index}__owed_share`] = member.total.toString();
 
-      if (member.memberInfo.first_name == "Aaron") {
-        splitwiseBody[`users_${index}_paid_share`] = receipt.totalPrice;
+        if (member.memberInfo.first_name == "Aaron") {
+          splitwiseBody[`users__${index}__paid_share`] = receipt.totalPrice.toString();
+        }
       }
     });
 
-    // Submit body to Splitwise
-    const createExpenseApiHeader = new Headers();
-    createExpenseApiHeader.append("Authorization", `Bearer ${process.env.SPLITWISE_API_KEY}`);
-    const createExpenseResponse = await fetch(SPLITWISE_API_ROUTE_CREATE_EXPENSE, {
-      method: "POST",
-      headers: createExpenseApiHeader,
-      body: JSON.stringify(splitwiseBody)
-    });
-    const createExpenseResponseJson = await createExpenseResponse.json();
-    
-    if (!createExpenseResponseJson["expenses"]) {
-      return new Response("Splitwise error occured", { status: 500 });
-    }
-    return Response.json(createExpenseResponseJson);
+    // Using axios instead of fetch because splitwiseBody doesn't need to 
+    // be stringified
+    const axiosResponse = await axios({
+      method: "post",
+      url: SPLITWISE_API_ROUTE_CREATE_EXPENSE,
+      headers: {
+        Authorization: `Bearer ${process.env.SPLITWISE_API_KEY}`
+      },
+      data: splitwiseBody
+    })
+    return Response.json(axiosResponse.data);
   } else {
     return new Response("No data provided", { status: 400 })
   }
