@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 interface SplitReceiptProps {
   receipt: Receipt;
   setFinalReceiptSplit: (finalReceiptSplit: FinalReceiptSplit) => void;
+  setGroupId: (groupId: number) => void;
 }
 
-export default function SplitReceipt({ receipt, setFinalReceiptSplit }: SplitReceiptProps) {
-  const [groupId, setGroupId] = useState(0);
+export default function SplitReceipt({ receipt, setFinalReceiptSplit, setGroupId }: SplitReceiptProps) {
   const [groupMembers, setGroupMembers] = useState<Array<SplitwiseMember>>([]);
   const [formState, setFormState] = useState<ProposedSplits>();
 
@@ -56,8 +56,6 @@ export default function SplitReceipt({ receipt, setFinalReceiptSplit }: SplitRec
         [itemName]: [...formState![itemName], member],
       });
     }
-
-    console.log(formState);
   };
 
   const handleSubmit = async () => {
@@ -66,7 +64,7 @@ export default function SplitReceipt({ receipt, setFinalReceiptSplit }: SplitRec
       body: JSON.stringify({
         "members": groupMembers,
         "receipt": receipt,
-        "memberSplits": formState
+        "memberSplits": formState,
       })
     });
     const response = await rawResponse.json();
