@@ -11,6 +11,7 @@ export interface Receipt {
   tip: number;
   serviceFee: number;
   tax: number;
+  miscFees: number;
   totalPrice: number;
 }
 
@@ -26,10 +27,12 @@ export interface SplitwiseMember {
     large: string;
   };
   custom_picture: boolean;
-  balance: [{
-    currency_code: string;
-    amount: string;
-  }]
+  balance: [
+    {
+      currency_code: string;
+      amount: string;
+    }
+  ];
 }
 
 export interface SplitwiseGroup {
@@ -39,18 +42,22 @@ export interface SplitwiseGroup {
   updated_at: string;
   simplify_by_default: boolean;
   members: [SplitwiseMember];
-  original_debts: [{
-    from: number;
-    to: number;
-    amount: string;
-    currency_code: string;
-  }];
-  simplified_debts: [{
-    from: number;
-    to: number;
-    amount: string;
-    currency_code: string; 
-  }];
+  original_debts: [
+    {
+      from: number;
+      to: number;
+      amount: string;
+      currency_code: string;
+    }
+  ];
+  simplified_debts: [
+    {
+      from: number;
+      to: number;
+      amount: string;
+      currency_code: string;
+    }
+  ];
   avatar: {
     original: string | null;
     xxlarge: string;
@@ -62,13 +69,13 @@ export interface SplitwiseGroup {
   custom_avatar: boolean;
   cover_photo: {
     xxlarge: string;
-    xlarge: string; 
+    xlarge: string;
   };
   invite_link: string;
 }
 
 export interface SplitwiseGetGroupsResponse {
-  groups: [SplitwiseGroup]
+  groups: [SplitwiseGroup];
 }
 
 export interface GetGroupResponse {
@@ -83,12 +90,13 @@ export interface ProposedSplits {
 export interface FinalReceiptMemberSplit {
   memberInfo: SplitwiseMember;
   splits: {
-    [itemName: string] : number;
+    [itemName: string]: number;
   };
   subtotal: number;
   tip: number;
   serviceFee: number;
   tax: number;
+  miscFees: number;
   total: number;
 }
 
