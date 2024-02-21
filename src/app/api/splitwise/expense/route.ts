@@ -40,7 +40,10 @@ export async function POST(request: Request) {
         splitwiseBody[`users__${index}__user_id`] = member.memberInfo.id;
         splitwiseBody[`users__${index}__owed_share`] = member.total.toString();
 
-        if (member.memberInfo.first_name == "Aaron") {
+        if (
+          member.memberInfo.first_name == process.env.FIRST_NAME &&
+          member.memberInfo.last_name == process.env.LAST_NAME
+        ) {
           splitwiseBody[`users__${index}__paid_share`] =
             receipt.totalPrice.toString();
         }
