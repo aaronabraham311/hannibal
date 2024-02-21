@@ -1,7 +1,8 @@
 import { FinalReceiptSplit, Receipt } from "@/app/utils/types";
 import axios from "axios";
 
-const SPLITWISE_API_ROUTE_CREATE_EXPENSE = "https://secure.splitwise.com/api/v3.0/create_expense"
+const SPLITWISE_API_ROUTE_CREATE_EXPENSE =
+  "https://secure.splitwise.com/api/v3.0/create_expense";
 
 interface SplitwiseCreateExpenseBody {
   cost: string;
@@ -24,14 +25,14 @@ export async function POST(request: Request) {
 
     // Package information into a Splitwise request
     let splitwiseBody: SplitwiseCreateExpenseBody = {
-      "cost": receipt.totalPrice.toString(),
-      "details": "from hannibal",
-      "description": "Instacart",
-      "date": new Date(Date.now()).toISOString(),
-      "repeat_interval": "never",
-      "currency_code": "CAD",
-      "category_id": 15,
-      "group_id": groupId,
+      cost: receipt.totalPrice.toString(),
+      details: "from hannibal",
+      description: "Instacart",
+      date: new Date(Date.now()).toISOString(),
+      repeat_interval: "never",
+      currency_code: "CAD",
+      category_id: 15,
+      group_id: groupId,
     };
 
     finalSplits.members.forEach((member, index) => {
@@ -40,23 +41,24 @@ export async function POST(request: Request) {
         splitwiseBody[`users__${index}__owed_share`] = member.total.toString();
 
         if (member.memberInfo.first_name == "Aaron") {
-          splitwiseBody[`users__${index}__paid_share`] = receipt.totalPrice.toString();
+          splitwiseBody[`users__${index}__paid_share`] =
+            receipt.totalPrice.toString();
         }
       }
     });
 
-    // Using axios instead of fetch because splitwiseBody doesn't need to 
+    // Using axios instead of fetch because splitwiseBody doesn't need to
     // be stringified
     const axiosResponse = await axios({
       method: "post",
       url: SPLITWISE_API_ROUTE_CREATE_EXPENSE,
       headers: {
-        Authorization: `Bearer ${process.env.SPLITWISE_API_KEY}`
+        Authorization: `Bearer ${process.env.SPLITWISE_API_KEY}`,
       },
-      data: splitwiseBody
-    })
+      data: splitwiseBody,
+    });
     return Response.json(axiosResponse.data);
   } else {
-    return new Response("No data provided", { status: 400 })
+    return new Response("No data provided", { status: 400 });
   }
 }

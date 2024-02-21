@@ -60,7 +60,7 @@ export default function SplitReceipt({
       setFormState({
         ...formState,
         [itemName]: formState![itemName].filter(
-          (currentMember) => currentMember.id !== member.id
+          (currentMember) => currentMember.id !== member.id,
         ),
       });
     } else {

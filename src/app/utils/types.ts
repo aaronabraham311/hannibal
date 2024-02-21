@@ -31,7 +31,7 @@ export interface SplitwiseMember {
     {
       currency_code: string;
       amount: string;
-    }
+    },
   ];
 }
 
@@ -48,7 +48,7 @@ export interface SplitwiseGroup {
       to: number;
       amount: string;
       currency_code: string;
-    }
+    },
   ];
   simplified_debts: [
     {
@@ -56,7 +56,7 @@ export interface SplitwiseGroup {
       to: number;
       amount: string;
       currency_code: string;
-    }
+    },
   ];
   avatar: {
     original: string | null;

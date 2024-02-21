@@ -41,14 +41,14 @@ const splitAndUpdateCost = (
   costType: "tip" | "serviceFee" | "tax" | "miscFees",
   totalCost: number,
   involvedMembers: SplitwiseMember[],
-  finalReceiptSplitObject: FinalReceiptSplit
+  finalReceiptSplitObject: FinalReceiptSplit,
 ) => {
   const costSplit = splitCost(totalCost, involvedMembers);
   costSplit.forEach((memberSplit) => {
     // Find the member in the final receipt object
     const index = finalReceiptSplitObject.members.findIndex(
       (finalMemberSplit) =>
-        finalMemberSplit.memberInfo.id === memberSplit.memberId
+        finalMemberSplit.memberInfo.id === memberSplit.memberId,
     );
 
     // Safely update the member's cost if found
@@ -59,7 +59,7 @@ const splitAndUpdateCost = (
 };
 
 const initializeFinalSplit = (
-  members: SplitwiseMember[]
+  members: SplitwiseMember[],
 ): FinalReceiptSplit => {
   const finalReceiptSplitObject: FinalReceiptSplit = {
     members: [],
@@ -83,7 +83,7 @@ const initializeFinalSplit = (
 export const splitReceipt = (
   receipt: Receipt,
   proposedSplits: ProposedSplits,
-  members: SplitwiseMember[]
+  members: SplitwiseMember[],
 ): FinalReceiptSplit => {
   // Initialize split
   const finalReceiptSplitObject = initializeFinalSplit(members);
@@ -102,7 +102,7 @@ export const splitReceipt = (
       // Get index that corresponds to member object we want to update
       const index = finalReceiptSplitObject.members.findIndex(
         (finalMemberSplit) =>
-          finalMemberSplit.memberInfo.id == memberSplit.memberId
+          finalMemberSplit.memberInfo.id == memberSplit.memberId,
       );
 
       // Update
@@ -118,7 +118,7 @@ export const splitReceipt = (
     .map((member) => member.id);
   const involvedMembersIdSet = new Set(involvedMembersIdsFlattened);
   const involvedMembers = members.filter((member) =>
-    involvedMembersIdSet.has(member.id)
+    involvedMembersIdSet.has(member.id),
   );
 
   // Split tip, service fee, misc fees and tax
@@ -126,25 +126,25 @@ export const splitReceipt = (
     "tip",
     receipt.tip,
     involvedMembers,
-    finalReceiptSplitObject
+    finalReceiptSplitObject,
   );
   splitAndUpdateCost(
     "serviceFee",
     receipt.serviceFee,
     involvedMembers,
-    finalReceiptSplitObject
+    finalReceiptSplitObject,
   );
   splitAndUpdateCost(
     "miscFees",
     receipt.miscFees,
     involvedMembers,
-    finalReceiptSplitObject
+    finalReceiptSplitObject,
   );
   splitAndUpdateCost(
     "tax",
     receipt.tax,
     involvedMembers,
-    finalReceiptSplitObject
+    finalReceiptSplitObject,
   );
 
   // Update total
@@ -163,7 +163,7 @@ export const splitReceipt = (
     (acc, member) => {
       return acc + member.total;
     },
-    0
+    0,
   );
 
   return finalReceiptSplitObject;
