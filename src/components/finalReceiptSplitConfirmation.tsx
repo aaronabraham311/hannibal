@@ -1,4 +1,8 @@
-import { FinalReceiptMemberSplit, FinalReceiptSplit, Receipt } from "@/app/utils/types";
+import {
+  FinalReceiptMemberSplit,
+  FinalReceiptSplit,
+  Receipt,
+} from "@/app/utils/types";
 
 interface FinalReceiptSplitConfirmationProps {
   finalReceiptSplit: FinalReceiptSplit;
@@ -6,73 +10,85 @@ interface FinalReceiptSplitConfirmationProps {
   groupId: number;
 }
 
-export default function FinalReceiptSplitConfirmation({ finalReceiptSplit, receipt, groupId } : FinalReceiptSplitConfirmationProps) {
+export default function FinalReceiptSplitConfirmation({
+  finalReceiptSplit,
+  receipt,
+  groupId,
+}: FinalReceiptSplitConfirmationProps) {
   const handleSubmit = async () => {
     const rawJson = await fetch("/api/splitwise/expense", {
       method: "POST",
       body: JSON.stringify({
         receipt: receipt,
         finalSplits: finalReceiptSplit,
-        groupId: groupId
-      })
+        groupId: groupId,
+      }),
     });
     const json = await rawJson.json();
-    console.log(json)
-  }
-  
+  };
+
   return (
     <div className="p-4">
       <table className="min-w-full table-fixed">
         <thead>
           <tr>
             <th>Item</th>
-            {finalReceiptSplit.members.map(member => (
+            {finalReceiptSplit.members.map((member) => (
               <th key={member.memberInfo.id}>{member.memberInfo.first_name}</th>
             ))}
             <th>Amount</th>
           </tr>
         </thead>
         <tbody>
-          {receipt.items.map(item => (
+          {receipt.items.map((item) => (
             <tr key={item.name}>
               <td>{item.name}</td>
-              {finalReceiptSplit.members.map(member => (
-                <td key={member.memberInfo.id}>{member.splits[item.name]?.toFixed(2) || '-'}</td>
+              {finalReceiptSplit.members.map((member) => (
+                <td key={member.memberInfo.id}>
+                  {member.splits[item.name]?.toFixed(2) || "-"}
+                </td>
               ))}
               <td>{item.totalItemPrice.toFixed(2)}</td>
             </tr>
           ))}
           <tr>
             <td>Subtotal</td>
-            {finalReceiptSplit.members.map(member => (
+            {finalReceiptSplit.members.map((member) => (
               <td key={member.memberInfo.id}>{member.subtotal}</td>
             ))}
             <td>{receipt.subtotal.toFixed(2)}</td>
           </tr>
           <tr>
             <td>Tip</td>
-            {finalReceiptSplit.members.map(member => (
+            {finalReceiptSplit.members.map((member) => (
               <td key={member.memberInfo.id}>{member.tip}</td>
             ))}
             <td>{receipt.tip.toFixed(2)}</td>
           </tr>
           <tr>
             <td>Service Fee</td>
-            {finalReceiptSplit.members.map(member => (
+            {finalReceiptSplit.members.map((member) => (
               <td key={member.memberInfo.id}>{member.serviceFee}</td>
             ))}
             <td>{receipt.serviceFee.toFixed(2)}</td>
           </tr>
           <tr>
             <td>Tax</td>
-            {finalReceiptSplit.members.map(member => (
+            {finalReceiptSplit.members.map((member) => (
               <td key={member.memberInfo.id}>{member.tax}</td>
             ))}
             <td>{receipt.tax.toFixed(2)}</td>
           </tr>
           <tr>
+            <td>Misc Fees</td>
+            {finalReceiptSplit.members.map((member) => (
+              <td key={member.memberInfo.id}>{member.miscFees}</td>
+            ))}
+            <td>{receipt.miscFees.toFixed(2)}</td>
+          </tr>
+          <tr>
             <td>Total</td>
-            {finalReceiptSplit.members.map(member => (
+            {finalReceiptSplit.members.map((member) => (
               <td key={member.memberInfo.id}>{member.total}</td>
             ))}
             <td>{receipt.totalPrice.toFixed(2)}</td>
@@ -80,7 +96,7 @@ export default function FinalReceiptSplitConfirmation({ finalReceiptSplit, recei
         </tbody>
       </table>
       <div className="flex justify-center mt-4">
-        <button 
+        <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={handleSubmit}
         >
