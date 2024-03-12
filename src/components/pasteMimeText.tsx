@@ -48,6 +48,7 @@ export default function PasteMimeText({ setReceipt }: PasteMimeTextProps) {
           placeholder="Paste your text here..."
           value={mimeText}
           onChange={handleTextChange}
+          style={{ color: 'black' }}
         />
         {isParsing ? (
           <p>Parsing...</p>
