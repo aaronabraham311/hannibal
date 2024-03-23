@@ -60,6 +60,12 @@ export async function POST(request: Request) {
       },
       data: splitwiseBody,
     });
+
+    if (axiosResponse.status !== 200) {
+      console.log(axiosResponse)
+      return new Response("Error with Splitwise", { status: 400 })
+    }
+
     return Response.json(axiosResponse.data);
   } else {
     return new Response("No data provided", { status: 400 });

@@ -50,9 +50,12 @@ export default function SplitReceipt({
 
     // Set initial form state
     constructFormState();
+
+    console.log(formState);
   }, []);
 
   const handleMemberClick = (itemName: string, member: SplitwiseMember) => {
+    console.log(formState)
     const isSelected = formState![itemName]?.includes(member);
 
     if (isSelected) {
