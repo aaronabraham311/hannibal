@@ -10,7 +10,7 @@ Extract out items (name, quantity, price per unit and total price). Some items m
 adjusted -- these will be under the header "Replacements". Be sure to take these into account.
 
 The subtotal should reflect the total of all items before taxes and fees.
-The "tip" and "serviceFee" should be listed as specified. Under "tax," combine all tax-related charges into one sum including charges for HST, GST, tax on checkout bags, etc. 
+The "tip" and "serviceFee" should be listed as specified. Under "tax," combine all tax-related charges into one sum including charges for HST and GST. 
 Please aggregate any other additional fees not specified, such as checkout bag fees, into a "miscFees" total. Be sure to not include any tax amounts in miscFees.
 Finally, provide the "totalPrice" as the sum of all costs including items, tip, service fee, taxes, and miscellaneous fees.
 

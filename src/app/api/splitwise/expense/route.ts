@@ -61,9 +61,11 @@ export async function POST(request: Request) {
       data: splitwiseBody,
     });
 
-    if (axiosResponse.status !== 200) {
+    if (axiosResponse.status !== 200 || axiosResponse["data"]["errors"]) {
       console.log(axiosResponse)
       return new Response("Error with Splitwise", { status: 400 })
+    } else {
+      console.log("Posted to Splitwise")
     }
 
     return Response.json(axiosResponse.data);
